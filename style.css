@@ -1,0 +1,150 @@
+body{
+    background: grey;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+/*CHESS*/
+#chess {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+/*CHESSBOARD*/
+#chessboard{
+    /* display: flex;
+    flex-direction: column; */
+    z-index: 10;
+    /* margin-top: -120px; */
+    border: 2px solid black;
+}
+
+.row{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.white{
+    background: rgba(185, 238, 203, 0.849);
+    width: 50px;
+    height: 50px;
+    /* border: 0.5px solid black; */
+}
+
+.bl{
+    background: rgba(49, 153, 67, 0.781);
+    width: 50px;
+    height: 50px;
+    /* border: 0.5px solid black; */
+}
+
+.highlight {
+    filter: brightness(50%);
+}
+
+/*THINKING GIF*/
+#thinkGIF {
+    margin-left: -100px;
+    display: none;    
+}
+
+#thinkGIF img{
+    width: 100px;
+    height: 100px;
+}
+
+/* .invis{
+    background: none;
+    width: 60px;
+    height: 60px;
+} */
+
+/*PIECES*/
+.pieces{
+    width: 50px;
+    height: 50px;
+    z-index: 20;
+}
+
+.wP{
+    background: url("pawnW.png");
+}
+
+.bP{
+    background: url("pawnB.png");
+}
+
+.wN{
+    background: url("knightW.png");
+}
+
+.bN{
+    background: url("knightB.png");
+}
+
+.wB{
+    background: url("bishopW.png");
+}
+
+.bB{
+    background: url("bishopB.png");
+}
+
+.wR{
+    background: url("rookW.png");
+}
+
+.bR{
+    background: url("rookB.png");
+}
+
+.wQ{
+    background: url("queenW.png");
+}
+
+.bQ{
+    background: url("queenB.png");
+}
+
+.wK{
+    background: url("kingW.png");
+}
+
+.bK{
+    background: url("kingB.png");
+}
+
+/*PROMOTE*/
+#promoteToW {
+    width: 80px;
+    height: 220px;
+    margin: 20px;
+    margin-top: 90px;
+    margin-right: -125px;
+    border: 2px solid black;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    display: none;
+}
+
+#promoteToB {
+    width: 80px;
+    height: 220px;
+    margin: 20px;
+    margin-top: 90px;
+    margin-right: -125px;
+    border: 2px solid black;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    display: none;
+}
+
+.promote {
+    width: 50px;
+    height: 50px;
+}
