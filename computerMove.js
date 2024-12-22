@@ -132,6 +132,7 @@ function GenerateMoves(maxPlayer) {
     let saveEnPassant = possibleEnPassant
     let boards = []
     let pushedBoard
+    let castled
 
     // GET BOARDS
     for (let v = 0; v < pieceList.length; v++) {
@@ -155,14 +156,15 @@ function GenerateMoves(maxPlayer) {
 
         for (let n = 0; n < pieceList[v].validMoves.length; n++) {
             // Set up board
+            castled = false
             boardRep120[pieceList[v].squareOn120] = " "
             savePiece = boardRep120[pieceList[v].validMoves[n]]
             boardRep120[pieceList[v].validMoves[n]] = pieceList[v].piece
             if (pieceList[v].type == "K") {
-                if (pieceList[v].validMoves[n] == 93 && pieceList[v].squareOn120 == 95) { boardRep120[91] = ' '; boardRep120[94] = 'r' }
-                if (pieceList[v].validMoves[n] == 97 && pieceList[v].squareOn120 == 95) { boardRep120[98] = ' '; boardRep120[96] = 'r' }
-                if (pieceList[v].validMoves[n] == 23 && pieceList[v].squareOn120 == 25) { boardRep120[21] = ' '; boardRep120[24] = 'R' }
-                if (pieceList[v].validMoves[n] == 27 && pieceList[v].squareOn120 == 25) { boardRep120[28] = ' '; boardRep120[26] = 'R' }
+                if (pieceList[v].validMoves[n] == 93 && pieceList[v].squareOn120 == 95) { boardRep120[91] = ' '; boardRep120[94] = 'r'; castled = true; }
+                if (pieceList[v].validMoves[n] == 97 && pieceList[v].squareOn120 == 95) { boardRep120[98] = ' '; boardRep120[96] = 'r'; castled = true; }
+                if (pieceList[v].validMoves[n] == 23 && pieceList[v].squareOn120 == 25) { boardRep120[21] = ' '; boardRep120[24] = 'R'; castled = true; }
+                if (pieceList[v].validMoves[n] == 27 && pieceList[v].squareOn120 == 25) { boardRep120[28] = ' '; boardRep120[26] = 'R'; castled = true; }
             }
 
             // Check if promoted
@@ -199,6 +201,10 @@ function GenerateMoves(maxPlayer) {
                 // Add board
                 pushedBoard = false
                 boardScore = GetScoreBoard()
+                if (castled && endOrMiddleGame() == "M") { 
+                    if (isWhite == 'w') { boardScore += 100; }
+                    if (isWhite == 'b') { boardScore -= 100; }
+                }
                 if (boards.length == 0) {
                     boards.push([boardRep120.slice(), boardScore])
                 }
@@ -321,8 +327,8 @@ function MiniMax(depth, alpha, beta, maxPlayer) {
     // console.log(depth)
     // If depth == 0, return the score and the number of the node on the tree
     if (depth == 0) {
-        let score = Quiescence(boardScore, alpha, beta, !maxPlayer)
-        // console.log("SCORE", score)
+        // let score = Quiescence(boardScore, alpha, beta, !maxPlayer)
+        let score = boardScore
         // return score
         return [score, boardRep120]
     }
@@ -369,13 +375,20 @@ function MiniMax(depth, alpha, beta, maxPlayer) {
                 if (evalBoard > maxEvalVal) {
                     maxEvalVal = evalBoard
                     maxEval = [allMoves[v][0].slice()]
+                    PrintBoard(boardRep120)
+                    // console.log(boardRep120)
+                    console.log("SCORE W -", depth, evalBoard)
                 }
                 else if (evalBoard == maxEvalVal) {
                     maxEval.push(allMoves[v][0].slice())
+                    PrintBoard(boardRep120)
+                    // console.log(boardRep120)
+                    console.log("SCORE W -", depth, evalBoard)
                 }
 
                 alpha = Math.max(alpha, evalBoard)
                 if (beta <= alpha) {
+                    console.log(boardRep120)
                     break
                 }
             }
@@ -418,13 +431,20 @@ function MiniMax(depth, alpha, beta, maxPlayer) {
                 if (evalBoard < minEvalVal) {
                     minEvalVal = evalBoard
                     minEval = [allMoves[v][0].slice()]
+                    PrintBoard(boardRep120)
+                    // console.log(boardRep120)
+                    console.log("SCORE B -", depth, evalBoard)
                 }
                 else if (evalBoard == minEvalVal) {
                     minEval.push(allMoves[v][0].slice())
+                    PrintBoard(boardRep120)
+                    // console.log(boardRep120)
+                    console.log("SCORE B -", depth, evalBoard)
                 }
 
                 beta = Math.min(beta, evalBoard)
                 if (beta <= alpha) {
+                    console.log(boardRep120)
                     break
                 }
             }
@@ -476,7 +496,7 @@ function ComputerMove() {
     let saveCastlePieces = [...castlePiecesMoved]
     let saveIsInCheck = [K[0].isInCheck, K[1].isInCheck]
 
-    let minimax = MiniMax(3, -Infinity, Infinity, isWhiteBool) // get best move (bottom of tree, last move) 
+    let minimax = MiniMax(1, -Infinity, Infinity, isWhiteBool) // get best move (bottom of tree, last move) 
     let bestScore = minimax[0]
     let chosenMoves = minimax[1]
     let move = chosenMoves[Math.floor(Math.random() * chosenMoves.length)]
