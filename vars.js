@@ -90,3 +90,13 @@ var middleEnd = "M";
 var maxDepth;
 var quiesceScore; // also known as stand_pat
 var boardScore;
+
+function PrintBoard(boardRep120) {
+    for (var i = 0; i < 8; i++) {
+        arr = []
+        for (var m = 0; m < 8; m++) {
+            arr.push(boardRep120[21+10*i+m])
+        }
+        console.log(arr)
+    }
+}
