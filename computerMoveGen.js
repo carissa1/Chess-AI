@@ -50,12 +50,12 @@ function GenerateMoves(maxPlayer) {
 
             // Check if promoted
             fileRank = SqToRowFile(pieceList[v].validMoves[n])
-            if (((isWhite1 == "w" && fileRank[0] == 0) || (isWhite1 == "b" && fileRank[0] == 7)) && pieceList[v].type == "P") {
+            if (((isWhite == "w" && fileRank[0] == 0) || (isWhite1 == "b" && fileRank[0] == 7)) && pieceList[v].type == "P") {
                 promoteTypes.forEach(newType => {
-                    if (isWhite1 == "w") {
+                    if (isWhite == "w") {
                         boardRep120[pieceList[v].validMoves[n]] = newType.toLowerCase()
                     }
-                    else if (isWhite1 == "b") {
+                    else if (isWhite == "b") {
                         boardRep120[pieceList[v].validMoves[n]] = newType
                     }
                 });
@@ -75,7 +75,8 @@ function GenerateMoves(maxPlayer) {
                 if (savePiece != " ") { // Captures
                     orderScore += (pieceValues[pieceList[v].type.toLowerCase()] - pieceValues[savePiece.toLowerCase()]) * 5
                 }
-
+                boardScore = orderScore
+                
                 if (boards.length == 0) {
                     boards.push([boardRep120.slice(), boardScore])
                 }
@@ -99,22 +100,24 @@ function GenerateMoves(maxPlayer) {
                 pushedBoard = false
                 boardScore = GetScoreBoard()
                 if (castled && endOrMiddleGame() == "M") { 
-                    if (isWhite == 'w') { boardScore += 100; }
-                    if (isWhite == 'b') { boardScore -= 100; }
+                    if (isWhite == 'w') { boardScore += 200; }
+                    if (isWhite == 'b') { boardScore -= 200; }
                 }
 
                 // Ordering
+                orderScore = boardScore
                 if (isWhite == 'w') { // Checks
-                    if (K[0].color == 'b' && K[0].IsKingInCheck()) { orderScore += 10000 }
-                    if (K[1].color == 'b' && K[1].IsKingInCheck()) { orderScore += 10000 }
+                    if (K[0].color == 'b' && K[0].IsKingInCheck()) { orderScore += 300 }
+                    if (K[1].color == 'b' && K[1].IsKingInCheck()) { orderScore += 300 }
                 }
                 else {
-                    if (K[0].color == 'w' && K[0].IsKingInCheck()) { orderScore += 10000 }
-                    if (K[1].color == 'w' && K[1].IsKingInCheck()) { orderScore += 10000 }
+                    if (K[0].color == 'w' && K[0].IsKingInCheck()) { orderScore += 300 }
+                    if (K[1].color == 'w' && K[1].IsKingInCheck()) { orderScore += 300 }
                 }
                 if (savePiece != " ") { // Captures
-                    orderScore += (pieceValues[pieceList[v].type.toLowerCase()] - pieceValues[savePiece.toLowerCase()]) * 5
+                    orderScore += (pieceValues[pieceList[v].type.toLowerCase()] - pieceValues[savePiece.toLowerCase()]) / 5
                 }
+                boardScore = orderScore
 
                 if (boards.length == 0) {
                     boards.push([boardRep120.slice(), boardScore])
@@ -177,9 +180,9 @@ function GenerateCaptures(maxPlayer) {
 
             // Check if promoted
             fileRank = SqToRowFile(pieceList[v].validMoves[n])
-            if (((isWhite1 == "w" && fileRank[0] == 0) || (isWhite1 == "b" && fileRank[0] == 7)) && pieceList[v].type == "P") {
+            if (((isWhite == "w" && fileRank[0] == 0) || (isWhite == "b" && fileRank[0] == 7)) && pieceList[v].type == "P") {
                 promoteTypes.forEach(newType => {
-                    if (isWhite1 == "w") {
+                    if (isWhite == "w") {
                         boardRep120[pieceList[v].validMoves[n]] = newType.toLowerCase()
                     }
                     else if (isWhite1 == "b") {
@@ -188,6 +191,22 @@ function GenerateCaptures(maxPlayer) {
                 });
                 pushedBoard = false
                 boardScore = GetScoreBoard()
+
+                // Ordering
+                orderScore = boardScore
+                if (isWhite == 'w') { // Checks
+                    if (K[0].color == 'b' && K[0].IsKingInCheck()) { orderScore += 300 }
+                    if (K[1].color == 'b' && K[1].IsKingInCheck()) { orderScore += 300 }
+                }
+                else {
+                    if (K[0].color == 'w' && K[0].IsKingInCheck()) { orderScore += 300 }
+                    if (K[1].color == 'w' && K[1].IsKingInCheck()) { orderScore += 300 }
+                }
+                if (savePiece != " ") { // Captures
+                    orderScore += (pieceValues[pieceList[v].type.toLowerCase()] - pieceValues[savePiece.toLowerCase()]) / 5
+                }
+                boardScore = orderScore
+
                 if (boards.length == 0) {
                     boards.push([boardRep120.slice(), boardScore])
                 }
@@ -209,6 +228,22 @@ function GenerateCaptures(maxPlayer) {
                 // Add board
                 pushedBoard = false
                 boardScore = GetScoreBoard()
+
+                // Ordering
+                orderScore = boardScore
+                if (isWhite == 'w') { // Checks
+                    if (K[0].color == 'b' && K[0].IsKingInCheck()) { orderScore += 300 }
+                    if (K[1].color == 'b' && K[1].IsKingInCheck()) { orderScore += 300 }
+                }
+                else {
+                    if (K[0].color == 'w' && K[0].IsKingInCheck()) { orderScore += 300 }
+                    if (K[1].color == 'w' && K[1].IsKingInCheck()) { orderScore += 300 }
+                }
+                if (savePiece != " ") { // Captures
+                    orderScore += (pieceValues[pieceList[v].type.toLowerCase()] - pieceValues[savePiece.toLowerCase()]) / 5
+                }
+                boardScore = orderScore
+
                 if (boards.length == 0) {
                     boards.push([boardRep120.slice(), boardScore])
                 }

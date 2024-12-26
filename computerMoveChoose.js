@@ -2,7 +2,7 @@ function MiniMax(depth, alpha, beta, maxPlayer) {
     // console.log(depth)
     // If depth == 0, return the score and the number of the node on the tree
     if (depth == 0) {
-        let score = Quiescence(boardScore, alpha, beta, !maxPlayer)
+        let score = Quiescence(boardScore, alpha, beta, maxPlayer)
         // let score = boardScore
         // return score
         return [score, boardRep120]
@@ -51,22 +51,22 @@ function MiniMax(depth, alpha, beta, maxPlayer) {
                     maxEvalVal = evalBoard
                     maxEval = [allMoves[v][0].slice()]
                     // PrintBoard(boardRep120)
-                    if (maxEvalVal >= 100) { PrintBoard(boardRep120) }
-                    chars = ""
-                    for (var i = 0; i < (2-depth); i++) {
-                        chars += "   "
-                    }
-                    console.log(chars + "SCORE W -", depth, evalBoard)
+                    // if (maxEvalVal >= 100) { PrintBoard(boardRep120) }
+                    // chars = ""
+                    // for (var i = 0; i < (2-depth); i++) {
+                    //     chars += "   "
+                    // }
+                    // console.log(chars + "SCORE W -", depth, evalBoard)
                 }
                 else if (evalBoard == maxEvalVal) {
                     maxEval.push(allMoves[v][0].slice())
                     // PrintBoard(boardRep120)
-                    if (maxEvalVal >= 100) { PrintBoard(boardRep120) }
-                    chars = ""
-                    for (var i = 0; i < (2-depth); i++) {
-                        chars += "   "
-                    }
-                    console.log(chars + "SCORE W -", depth, evalBoard)
+                    // if (maxEvalVal >= 100) { PrintBoard(boardRep120) }
+                    // chars = ""
+                    // for (var i = 0; i < (2-depth); i++) {
+                    //     chars += "   "
+                    // }
+                    // console.log(chars + "SCORE W -", depth, evalBoard)
                 }
 
                 alpha = Math.max(alpha, evalBoard)
@@ -115,20 +115,20 @@ function MiniMax(depth, alpha, beta, maxPlayer) {
                     minEvalVal = evalBoard
                     minEval = [allMoves[v][0].slice()]
                     // PrintBoard(boardRep120)
-                    chars = ""
-                    for (var i = 0; i < (2-depth); i++) {
-                        chars += "   "
-                    }
-                    console.log(chars + "SCORE B -", depth, evalBoard)
+                    // chars = ""
+                    // for (var i = 0; i < (2-depth); i++) {
+                    //     chars += "   "
+                    // }
+                    // console.log(chars + "SCORE B -", depth, evalBoard)
                 }
                 else if (evalBoard == minEvalVal) {
                     minEval.push(allMoves[v][0].slice())
                     // PrintBoard(boardRep120)
-                    chars = ""
-                    for (var i = 0; i < (2-depth); i++) {
-                        chars += "   "
-                    }
-                    console.log(chars + "SCORE B -", depth, evalBoard)
+                    // chars = ""
+                    // for (var i = 0; i < (2-depth); i++) {
+                    //     chars += "   "
+                    // }
+                    // console.log(chars + "SCORE B -", depth, evalBoard)
                 }
 
                 beta = Math.min(beta, evalBoard)
@@ -145,10 +145,10 @@ function MiniMax(depth, alpha, beta, maxPlayer) {
 
 function Quiescence(boardScore, alpha, beta, maxPlayer, level = 0) { // search only captures until reach stable position
     let quiesceScore = boardScore
-    if (!maxPlayer) { quiesceScore = -quiesceScore; }
-    if (quiesceScore >= beta) {
-        return beta
-    }
+
+    // if (quiesceScore >= beta) {
+    //     return beta
+    // }
     if (alpha < quiesceScore) {
         alpha = quiesceScore
     }
@@ -164,20 +164,24 @@ function Quiescence(boardScore, alpha, beta, maxPlayer, level = 0) { // search o
         boardRep120 = allCaptures[i][0].slice()
 
         // Get Quiescence and set score
-        score = Quiescence(allCaptures[i][1], -alpha, -beta, !maxPlayer, level + 1)
-        if (!maxPlayer) { score = -score; }
+        score = Quiescence(allCaptures[i][1], -beta, -alpha, !maxPlayer, level + 1)
 
-        if (score >= beta) {
-            boardRep120 = oldBoardRep.slice()
-            return beta;
-        }  
-        if(score > alpha) {
+        // if (score >= beta) {
+        //     boardRep120 = oldBoardRep.slice()
+        //     return beta;
+        // }  
+        if (maxPlayer && score > quiesceScore) {
+            quiesceScore = score
+        }
+        if (!maxPlayer && score < quiesceScore) {
+            quiesceScore = score
+        }
+        if (score > alpha) {
             alpha = score;
         }
     }
     boardRep120 = oldBoardRep.slice()
-    if (!maxPlayer) { alpha = -alpha; }
-    return alpha
+    return quiesceScore
 }
 
 function ComputerMove() {
@@ -188,7 +192,7 @@ function ComputerMove() {
     let saveCastlePieces = [...castlePiecesMoved]
     let saveIsInCheck = [K[0].isInCheck, K[1].isInCheck]
 
-    let minimax = MiniMax(2, -Infinity, Infinity, isWhiteBool) // get best move (bottom of tree, last move) 
+    let minimax = MiniMax(1, -Infinity, Infinity, isWhiteBool) // get best move (bottom of tree, last move) 
     let bestScore = minimax[0]
     let chosenMoves = minimax[1]
     let move = chosenMoves[Math.floor(Math.random() * chosenMoves.length)]
@@ -196,10 +200,11 @@ function ComputerMove() {
     console.log(chosenMoves)
     console.log(move)
 
-    // for (var i = 0; i < chosenMoves.length; i++) {
-    //     PrintBoard(chosenMoves[i])
-    //     console.log("")
-    // }
+    console.log("")
+    for (var i = 0; i < chosenMoves.length; i++) {
+        PrintBoard(chosenMoves[i])
+        console.log("")
+    }
 
     // Move piece
     castlePiecesMoved = saveCastlePieces
