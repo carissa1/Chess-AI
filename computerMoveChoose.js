@@ -158,30 +158,35 @@ function Quiescence(boardScore, alpha, beta, maxPlayer, level = 0) { // search o
     }
 
     let allCaptures = GenerateCaptures(maxPlayer)
+    if (allCaptures.length == 0) {
+        return quiesceScore
+    }
+
     let oldBoardRep = boardRep120.slice()
     let score = 0
     for (let i = 0; i < allCaptures.length; i++) {
         boardRep120 = allCaptures[i][0].slice()
 
         // Get Quiescence and set score
-        score = Quiescence(allCaptures[i][1], -beta, -alpha, !maxPlayer, level + 1)
+        score = -Quiescence(allCaptures[i][1], -beta, -alpha, !maxPlayer, level + 1)
 
-        // if (score >= beta) {
-        //     boardRep120 = oldBoardRep.slice()
-        //     return beta;
-        // }  
-        if (maxPlayer && score > quiesceScore) {
-            quiesceScore = score
-        }
-        if (!maxPlayer && score < quiesceScore) {
-            quiesceScore = score
-        }
+        if (score >= beta) {
+            boardRep120 = oldBoardRep.slice()
+            return beta;
+        }  
+
         if (score > alpha) {
             alpha = score;
         }
     }
+    // if (maxPlayer) {
+    //     quiesceScore = Math.max(scores)
+    // }
+    // if (!maxPlayer) {
+    //     quiesceScore = Math.min(scores)
+    // }
     boardRep120 = oldBoardRep.slice()
-    return quiesceScore
+    return alpha
 }
 
 function ComputerMove() {
