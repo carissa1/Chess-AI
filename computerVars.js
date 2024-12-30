@@ -1,17 +1,17 @@
 var pieceValues = {
     // 100 centipawns = 1 pawn
-    p: 100,
-    P: -100,
-    n: 300,
-    N: -300,
-    b: 300,
-    B: -300,
-    r: 500,
-    R: -500,
-    q: 9000,
-    Q: -9000,
-    k: 10000,
-    K: -10000
+    p: 160,
+    P: -160,
+    n: 200,
+    N: -200,
+    b: 200,
+    B: -200,
+    r: 400,
+    R: -400,
+    q: 800,
+    Q: -800,
+    k: 2000,
+    K: -2000
 }
 
 // multiplier for PSTValues to get closer to pieceValues
@@ -29,7 +29,7 @@ var pieceMultiplier = {
     B: 10,
     R: 20,
     Q: 40,
-    K: 80
+    K: 100
 }
 
 var PSTValues = {

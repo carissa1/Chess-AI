@@ -195,15 +195,15 @@ function GenerateCaptures(maxPlayer) {
                 // Ordering
                 orderScore = boardScore
                 if (isWhite == 'w') { // Checks
-                    if (K[0].color == 'b' && K[0].IsKingInCheck()) { orderScore += 300 }
-                    if (K[1].color == 'b' && K[1].IsKingInCheck()) { orderScore += 300 }
+                    if (K[0].color == 'b' && K[0].IsKingInCheck()) { orderScore += 100 }
+                    if (K[1].color == 'b' && K[1].IsKingInCheck()) { orderScore += 100 }
                 }
                 else {
-                    if (K[0].color == 'w' && K[0].IsKingInCheck()) { orderScore += 300 }
-                    if (K[1].color == 'w' && K[1].IsKingInCheck()) { orderScore += 300 }
+                    if (K[0].color == 'w' && K[0].IsKingInCheck()) { orderScore += 100 }
+                    if (K[1].color == 'w' && K[1].IsKingInCheck()) { orderScore += 100 }
                 }
                 if (savePiece != " ") { // Captures
-                    orderScore += (pieceValues[pieceList[v].type.toLowerCase()] - pieceValues[savePiece.toLowerCase()]) / 5
+                    orderScore += (pieceValues[pieceList[v].type.toLowerCase()] - pieceValues[savePiece.toLowerCase()]) / 10
                 }
                 boardScore = orderScore
 
