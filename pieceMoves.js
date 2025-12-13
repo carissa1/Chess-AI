@@ -194,30 +194,20 @@ function PieceMovesCheck(piece) {
         // boardRep120[piece.squareOn120] = " "
         // piece.squareOn120 = piece.validMoves[i]
         // ResetVars()
-        saveSq = piece.squareOn120
-        piece.squareOn120 = piece.validMoves[i]
         deletedPiece = boardRep120[piece.validMoves[i]]
-        boardRep120[saveSq] = " "
+        boardRep120[piece.squareOn120] = " "
         boardRep120[piece.validMoves[i]] = piece.piece
 
-        if (piece.type == "K") {
-            piece.IsKingInCheck()
-            if (piece.isInCheck) {
+        if (isWhite == "w") {
+            K[0].IsKingInCheck()
+            if (K[0].isInCheck) {
                 correctMoves.splice(correctMoves.indexOf(piece.validMoves[i]), 1)
             }
         }
-        else {
-            if (isWhite == "w") {
-                K[0].IsKingInCheck()
-                if (K[0].isInCheck) {
-                    correctMoves.splice(correctMoves.indexOf(piece.validMoves[i]), 1)
-                }
-            }
-            if (isWhite == "b") {
-                K[1].IsKingInCheck()
-                if (K[1].isInCheck) {
-                    correctMoves.splice(correctMoves.indexOf(piece.validMoves[i]), 1)
-                }
+        if (isWhite == "b") {
+            K[1].IsKingInCheck()
+            if (K[1].isInCheck) {
+                correctMoves.splice(correctMoves.indexOf(piece.validMoves[i]), 1)
             }
         }
 
@@ -231,8 +221,7 @@ function PieceMovesCheck(piece) {
         // boardRep120[piece.squareOn120] = " "
         // piece.squareOn120 = fromSq
         // ResetVars()
-        piece.squareOn120 = saveSq
-        boardRep120[saveSq] = piece.piece
+        boardRep120[piece.squareOn120] = piece.piece
         boardRep120[piece.validMoves[i]] = deletedPiece
     }
     return correctMoves

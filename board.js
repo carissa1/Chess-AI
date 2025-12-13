@@ -19,7 +19,7 @@ class Board {
             for (let m = 0; m < this.height; m++) {
                 //this.squares.push(m + this.width*i)
                 //column.push(this.width*m + i)
-                column.push(this.squares[m*8 + i])
+                column.push(this.squares[m*BOARD_HEIGHT + i])
             }
             // console.log(column)
             this.columns.push(column)
@@ -101,7 +101,7 @@ function Sq120to64(sq120) {
 /* INITIALIZE BOARD */
 function InitBoards() {
     board = new Array(BOARD_SQ_NUM)
-    board64Sq = new Board(8, 8)
+    board64Sq = new Board(BOARD_WIDTH, BOARD_HEIGHT)
 
     let sq = SQUARES.A1;
     let sq64 = 0;
@@ -122,6 +122,19 @@ function InitBoards() {
     board64Sq.MakeBoard()
 }
 InitBoards()
+
+// PRINT BOARD NICELY
+function PrintBoard120(board) {
+    let boardStr = ""
+    let emptyRow = true
+    for (let i = 0; i < 8; i++) {
+        for (let m = 0; m < 8; m++) {
+            boardStr += board[Sq64to120(i*8 + m)].toString() + ' '
+        }
+        boardStr += "\n"
+    }
+    console.log(boardStr)
+}
 
 // boardRepresent
 boardRepresent = [

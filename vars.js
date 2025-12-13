@@ -17,6 +17,8 @@ var SQUARES = {
     A8:91, B8:92, C8:93, D8:94, E8:95, F8:96, G8:97, H8: 98,
     NO_SQ:99, OFFBOARD:100
 }
+var BOARD_HEIGHT = 8
+var BOARD_WIDTH = 8
 
 /* Castling */
 var canCastle = { // where can you castle
@@ -90,13 +92,3 @@ var middleEnd = "M";
 var maxDepth;
 var quiesceScore; // also known as stand_pat
 var boardScore;
-
-function PrintBoard(boardRep120) {
-    for (var i = 0; i < 8; i++) {
-        arr = []
-        for (var m = 0; m < 8; m++) {
-            arr.push(boardRep120[21+10*i+m])
-        }
-        console.log(arr)
-    }
-}
