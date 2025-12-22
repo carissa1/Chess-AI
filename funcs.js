@@ -177,22 +177,22 @@ function PromoteToThis(clickedId) {
 function SetCastlePieces() {
     /* Set all castle pieces and check if they moved */
 
-    if (boardRepresent[60] != 'k') {
+    if (boardRep120[95] != 'k') {
         castlePiecesMoved[0] = true
     }
-    if (boardRepresent[63] != 'r') {
+    if (boardRep120[98] != 'r') {
         castlePiecesMoved[3] = true // kingside rook
     }
-    if (boardRepresent[56] != 'r') {
+    if (boardRep120[91] != 'r') {
         castlePiecesMoved[2] = true // queenside rook
     }
-    if (boardRepresent[4] != 'K') {
+    if (boardRep120[25] != 'K') {
         castlePiecesMoved[1] = true
     }
-    if (boardRepresent[7] != 'R') {
+    if (boardRep120[28] != 'R') {
         castlePiecesMoved[5] = true // kingside rook
     }
-    if (boardRepresent[0] != 'R') {
+    if (boardRep120[21] != 'R') {
         castlePiecesMoved[4] = true // queenside rook
     }
 }
@@ -201,7 +201,7 @@ function UpdateCastling() {
     K[0].IsKingInCheck()
     K[1].IsKingInCheck()
     if (!castlePiecesMoved[0] && !K[0].isInCheck) {
-        if ((!castlePiecesMoved[3]) && (boardRepresent[61] == ' ') && (boardRepresent[62] == ' ')) {
+        if ((!castlePiecesMoved[3]) && (boardRep120[96] == ' ') && (boardRep120[97] == ' ')) {
             if (!SqAttacked(96, 'w') && !SqAttacked(97, 'w')) {
                 canCastle.wK = 'K'
             }
@@ -212,7 +212,7 @@ function UpdateCastling() {
         else {
             canCastle.wK = ''
         }
-        if ((!castlePiecesMoved[2]) && (boardRepresent[57] == ' ') && (boardRepresent[58] == ' ') && (boardRepresent[59] == ' ')) {
+        if ((!castlePiecesMoved[2]) && (boardRep120[92] == ' ') && (boardRep120[93] == ' ') && (boardRep120[94] == ' ')) {
             if (!SqAttacked(93, 'w') && !SqAttacked(94, 'w')) {
                 canCastle.wQ = 'Q'
             }
@@ -229,7 +229,7 @@ function UpdateCastling() {
         canCastle.wQ = ''
     }
     if (!castlePiecesMoved[1] && !K[1].isInCheck) {
-        if ((!castlePiecesMoved[5]) && (boardRepresent[5] == ' ') && (boardRepresent[6] == ' ')) {
+        if ((!castlePiecesMoved[5]) && (boardRep120[26] == ' ') && (boardRep120[27] == ' ')) {
             if (!SqAttacked(26, 'b') && !SqAttacked(27, 'b')) {
                 canCastle.bK = 'k'
             }
@@ -240,7 +240,7 @@ function UpdateCastling() {
         else {
             canCastle.bK = ''
         }
-        if ((!castlePiecesMoved[4]) && (boardRepresent[1] == ' ') && (boardRepresent[2] == ' ') && (boardRepresent[3] == ' ')) {
+        if ((!castlePiecesMoved[4]) && (boardRep120[22] == ' ') && (boardRep120[23] == ' ') && (boardRep120[24] == ' ')) {
             if (!SqAttacked(23, 'b') && !SqAttacked(24, 'b')) {
                 canCastle.bQ = 'q'
             }
@@ -256,6 +256,15 @@ function UpdateCastling() {
         canCastle.bK = ''
         canCastle.bQ = ''
     }
+
+    if ((boardRep120[23] == 'K' && boardRep120[24] == 'R') || (boardRep120[27] == 'K' && boardRep120[26] == 'R')) {
+        hasCastled[1] = true;
+    }
+    else { hasCastled[1] = false; }
+    if ((boardRep120[93] == 'K' && boardRep120[94] == 'R') || (boardRep120[97] == 'K' && boardRep120[96] == 'R')) {
+        hasCastled[0] = true;
+    }
+    else { hasCastled[0] = false; }
 }
 
 function MateCheck() {
@@ -390,6 +399,7 @@ function AddMoveToList() {
     endStr += " " + isWhite.toString() + " " + castling + " " + possibleEnPassant2 + " " + numHalfMoves + " " + numFullMoves
 
     allMovesMade.push(endStr)
+    allCastleMoves.push(castlePiecesMoved.slice())
 }
 
 function FENToChessBoard(fenStr) {
@@ -447,12 +457,19 @@ function FENToChessBoard(fenStr) {
 
 function BackMove() {
     allMovesMade.pop()
-    if (isComputer) { allMovesMade.pop() }
+    allCastleMoves.pop()
+    if (isComputer) { 
+        allMovesMade.pop()
+        allCastleMoves.pop()
+    }
     FENToChessBoard(allMovesMade[allMovesMade.length - 1])
+    castlePiecesMoved = allCastleMoves[allCastleMoves.length - 1]
     // if (isComputer) {
     //     if (isWhite == 'w') { isWhite = 'b' }
     //     else { isWhite = 'w' }
     // }
+    SetCastlePieces()
+    UpdateCastling()
     ResetPieces()
     Reset()
 

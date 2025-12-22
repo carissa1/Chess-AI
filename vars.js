@@ -29,6 +29,8 @@ var canCastle = { // where can you castle
 }
 // var canCastle = []
 var castlePiecesMoved = [] // has the king or the rook moved [wK, bK, wRQ, wRK, bRQ, bRK]
+var hasCastled = [false, false] // [white castled?, black castled?]
+var allCastleMoves = []
 
 /* Set Up */
 var squareTens;

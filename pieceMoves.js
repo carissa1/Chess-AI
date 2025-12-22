@@ -175,6 +175,7 @@ function PieceMovesCheck(piece) {
     // let index
     // let fromSq
     let correctMoves = piece.validMoves.slice()
+    let pieceSquareOn120 = piece.squareOn120
     for (let i = 0; i < piece.validMoves.length; i++) {
         // moveToSq = piece.validMoves[i]
         // fromSq = piece.squareOn120
@@ -195,8 +196,9 @@ function PieceMovesCheck(piece) {
         // piece.squareOn120 = piece.validMoves[i]
         // ResetVars()
         deletedPiece = boardRep120[piece.validMoves[i]]
-        boardRep120[piece.squareOn120] = " "
+        boardRep120[pieceSquareOn120] = " "
         boardRep120[piece.validMoves[i]] = piece.piece
+        piece.squareOn120 = piece.validMoves[i]
 
         if (isWhite == "w") {
             K[0].IsKingInCheck()
@@ -221,8 +223,9 @@ function PieceMovesCheck(piece) {
         // boardRep120[piece.squareOn120] = " "
         // piece.squareOn120 = fromSq
         // ResetVars()
-        boardRep120[piece.squareOn120] = piece.piece
+        boardRep120[pieceSquareOn120] = piece.piece
         boardRep120[piece.validMoves[i]] = deletedPiece
+        piece.squareOn120 = pieceSquareOn120
     }
     return correctMoves
 }

@@ -102,6 +102,7 @@ R[3] = new Piece('b', 7, 'R')
 for (let i = 0; i < 8; i++) {
     P.push(new Piece('w', 48+i, 'P'))
 }
+// P.push(new Piece('w', 33, 'P'))
 for (let i = 0; i < 8; i++) { 
     P.push(new Piece('b', 8+i, 'P'))
 }

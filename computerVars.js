@@ -29,7 +29,7 @@ var pieceMultiplier = {
     B: 5,
     R: 10,
     Q: 20,
-    K: 40
+    K: 5
 }
 
 var PSTValues = {
@@ -243,6 +243,9 @@ function GetScoreBoard() { // only using boardRep120, not pieceList
             }
         }
     }
+
+    if (hasCastled[0] && middleEnd == 'M') { sumW += 100; }
+    if (hasCastled[1] && middleEnd == 'M') { sumB -= 100; }
 
     return sumW + sumB
 }
