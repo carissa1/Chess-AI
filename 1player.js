@@ -17,24 +17,6 @@ function StartGame(){
     castlePiecesMoved = [false, false, false, false, false, false]
     SetCastlePieces()
     Reset()
-
-    // boardRep120 = [
-    //     '_', '_', '_', '_', '_', '_', '_', '_', '_', '_',
-    //     '_', '_', '_', '_', '_', '_', '_', '_', '_', '_',
-    //     '_', 'R', ' ', ' ', ' ', 'K', 'B', 'N', 'R', '_',
-    //     '_', 'P', ' ', ' ', ' ', ' ', 'P', 'P', 'P', '_',
-    //     '_', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '_',
-    //     '_', ' ', ' ', ' ', 'b', ' ', ' ', ' ', ' ', '_',
-    //     '_', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '_',
-    //     '_', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '_',
-    //     '_', 'p', 'p', 'p', ' ', ' ', 'p', 'p', 'p', '_',
-    //     '_', 'r', 'n', 'b', 'q', 'k', ' ', 'n', 'r', '_',
-    //     '_', '_', '_', '_', '_', '_', '_', '_', '_', '_',
-    //     '_', '_', '_', '_', '_', '_', '_', '_', '_', '_'
-    // ]
-    // ResetPieces()
-    // Reset()
-
 }
 
 function UserMove(clickedId) {
@@ -206,7 +188,7 @@ function CheckMoveValid() {
         }
 
         // Update possible En Passant move
-        if (movePiece == "P" && Math.abs(Sq64to120(moveFromSq) - moveToSq) == 20) {
+        if (Math.abs(Sq64to120(moveFromSq) - moveToSq) == 20 && movePiece == 'P') {
             if (isWhite == 'w') { possibleEnPassant = Sq64to120(moveFromSq) - 20 }
             else { possibleEnPassant = Sq64to120(moveFromSq) + 20 }
         }

@@ -89,7 +89,7 @@ B[3] = new Piece('b', 5, 'B')
 
 N[0] = new Piece('w', 57, 'N')
 N[1] = new Piece('w', 62, 'N')
-N[2] = new Piece('b', 1, 'N')
+N[2] = new Piece('b', 1, 'N') // 18
 N[3] = new Piece('b', 6, 'N')
 // N[0] = new Piece('b', 6, 'N')
 
@@ -102,10 +102,11 @@ R[3] = new Piece('b', 7, 'R')
 for (let i = 0; i < 8; i++) {
     P.push(new Piece('w', 48+i, 'P'))
 }
-// P.push(new Piece('w', 33, 'P'))
 for (let i = 0; i < 8; i++) { 
     P.push(new Piece('b', 8+i, 'P'))
 }
+// P[4] = new Piece('w', 36, 'P')
+// P[12] = new Piece('b', 28, 'P')
 
 // Create pieceList
 for (let i = 0; i < pieceListWithTypes.length; i++) {

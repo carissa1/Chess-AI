@@ -2,12 +2,12 @@ var pieceValues = {
     // 100 centipawns = 1 pawn
     p: 100,
     P: -100,
-    n: 300,
-    N: -300,
-    b: 300,
-    B: -300,
-    r: 500,
-    R: -500,
+    n: 500,
+    N: -500,
+    b: 500,
+    B: -500,
+    r: 700,
+    R: -700,
     q: 1000,
     Q: -1000,
     k: 10000,
@@ -25,17 +25,17 @@ var pieceValues = {
 // }
 var pieceMultiplier = {
     P: 5, 
-    N: 5,
-    B: 5,
+    N: 7,
+    B: 7,
     R: 10,
     Q: 20,
-    K: 5
+    K: 40
 }
 
 var PSTValues = {
     pM: [
          0,  0, 0,  0,  0, 0,  0, 0,
-         5,  5, 5,  5,  5, 5,  5, 5,
+         5,  5, 5,  0,  0, 5,  5, 5,
          0,  0, 0,  5,  5, 0,  0, 0,
          0,  0, 0, 10, 10, 0,  0, 0,
         -7,-10, 5, 10, 10, 5,-10,-7,
@@ -81,7 +81,7 @@ var PSTValues = {
         -10,  0,  7,  0,  0,  7,  0,-10,
         -10,  0,  0,  4,  4,  0,  0,-10,
         -10,  3,  0, -5, -5,  0,  3,-10,
-        -10,-10, -2,-10,-10, -2,-10,-10,
+        -10,-10, -5,-10,-10, -5,-10,-10,
     ],
     bE: [
         -10,-10,-10,-10,-10,-10,-10,-10,
@@ -120,8 +120,8 @@ var PSTValues = {
          -5,  0,  0,  0,  0,  0,  0, -5,
          -5,  0,  0,  0,  0,  0,  0, -5,
         -10,  0,  0,  0,  0,  0,  0,-10,
-        -10,  0,  2,  5,  5,  0,  0,-10,
-        -10,-10,-10,  5,  0,-10,-10,-10
+        -10,  0,  3,  5,  5,  0,  0,-10,
+        -10,-10,-10,  3,  0,-10,-10,-10
     ],
     qE: [
         -10,-10,-10, -5, -5,-10,-10,-10,
@@ -133,16 +133,16 @@ var PSTValues = {
         -10,  0,  0,  0,  0,  0,  0,-10,
         -10,-10,-10, -5, -5,-10,-10,-20
     ],
-    QM: [
-        -10,-10,-10,  5,  0,-10,-10,-10,
-        -10,  0,  0,  5,  5,  2,  0,-10,
-        -10,  0,  0,  0,  0,  0,  0,-10,
-         -5,  0,  0,  0,  0,  0,  0, -5,
-         -5,  0,  0,  0,  0,  0,  0, -5,
-        -10,  0,  0,  0,  0,  0,  0,-10,
-        -10,  0,  0,  0,  0,  0,  0,-10,
-        -10,-10,-10, -5, -5,-10,-10,-10,   
-    ],
+    // QM: [
+    //     -10,-10,-10,  5,  0,-10,-10,-10,
+    //     -10,  0,  0,  5,  5,  2,  0,-10,
+    //     -10,  0,  0,  0,  0,  0,  0,-10,
+    //      -5,  0,  0,  0,  0,  0,  0, -5,
+    //      -5,  0,  0,  0,  0,  0,  0, -5,
+    //     -10,  0,  0,  0,  0,  0,  0,-10,
+    //     -10,  0,  0,  0,  0,  0,  0,-10,
+    //     -10,-10,-10, -5, -5,-10,-10,-10,   
+    // ],
     kM: [
         -20,-20,-20,-20,-20,-20,-20,-20,
         -10,-10,-10,-10,-10,-10,-10,-10,
@@ -175,16 +175,26 @@ var PSTValues = {
     ],
 }
 
-PSTValues["PM"] = [...PSTValues["pM"]].reverse()
-PSTValues["PE"] = [...PSTValues["pE"]].reverse()
-PSTValues["NM"] = [...PSTValues["nM"]].reverse()
-PSTValues["NE"] = [...PSTValues["nE"]].reverse()
-PSTValues["BM"] = [...PSTValues["bM"]].reverse()
-PSTValues["BE"] = [...PSTValues["bE"]].reverse()
-PSTValues["RM"] = [...PSTValues["rM"]].reverse()
-PSTValues["RE"] = [...PSTValues["rE"]].reverse()
-PSTValues["QE"] = [...PSTValues["qE"]].reverse()
-PSTValues["KE"] = [...PSTValues["kE"]].reverse()
+function flipRows(pstVal) {
+    let pstNew = [];
+    for (let row = 7; row >= 0; row--) {
+        pstNew.push(...pstVal.slice(row * 8, row * 8 + 8));
+    }
+    return pstNew;
+}
+
+PSTValues["PM"] = flipRows(PSTValues["pM"])
+PSTValues["PE"] = flipRows(PSTValues["pE"])
+PSTValues["NM"] = flipRows(PSTValues["nM"])
+PSTValues["NE"] = flipRows(PSTValues["nE"])
+PSTValues["BM"] = flipRows(PSTValues["bM"])
+PSTValues["BE"] = flipRows(PSTValues["bE"])
+PSTValues["RM"] = flipRows(PSTValues["rM"])
+PSTValues["RE"] = flipRows(PSTValues["rE"])
+PSTValues["QM"] = flipRows(PSTValues["qM"])
+PSTValues["QE"] = flipRows(PSTValues["qE"])
+PSTValues["KM"] = flipRows(PSTValues["kM"])
+PSTValues["KE"] = flipRows(PSTValues["kE"])
 
 function getPSTScore(typeCase, square, type) {
     return parseInt(PSTValues[typeCase+middleEnd][square]) * pieceMultiplier[type]
@@ -269,6 +279,9 @@ function GetScoreTesting(board) {
             }
         }
     }
+
+    if (hasCastled[0] && middleEnd == 'M') { sumW += 100; }
+    if (hasCastled[1] && middleEnd == 'M') { sumB -= 100; }
 
     return sumW + sumB
 }

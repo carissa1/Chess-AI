@@ -125,6 +125,7 @@ function GenerateMoves(maxPlayer) {
     else {
         isWhite = "b"
     }
+
     // boardRepresent = board.slice()
     // // console.log(boardRepresent)
     // Reset()
@@ -169,21 +170,18 @@ function GenerateMoves(maxPlayer) {
 
             // Check if promoted
             fileRank = SqToRowFile(pieceList[v].validMoves[n])
-            if (((isWhite1 == "w" && fileRank[0] == 0) || (isWhite1 == "b" && fileRank[0] == 7)) && pieceList[v].type == "P") {
+            if (((isWhite == "w" && fileRank[0] == 0) || (isWhite == "b" && fileRank[0] == 7)) && pieceList[v].type == "P") {
                 promoteTypes.forEach(newType => {
-                    if (isWhite1 == "w") {
+                    if (isWhite == "w") {
                         boardRep120[pieceList[v].validMoves[n]] = newType.toLowerCase()
                     }
-                    else if (isWhite1 == "b") {
+                    else if (isWhite == "b") {
                         boardRep120[pieceList[v].validMoves[n]] = newType
                     }
                 });
                 pushedBoard = false
                 boardScore = GetScoreBoard()
-                if (boards.length == 0) {
-                    boards.push([boardRep120.slice(), boardScore])
-                }
-                else {
+                if (maxPlayer) {
                     for (let i = 0; i < boards.length; i++) {
                         if (boards[i][1] >= boardScore) {
                             boards.splice(i, 0, [boardRep120.slice(), boardScore, boardEnPassant])
@@ -191,9 +189,18 @@ function GenerateMoves(maxPlayer) {
                             break
                         }
                     }
-                    if (!pushedBoard) {
-                        boards.push([boardRep120.slice(), boardScore, boardEnPassant])
+                }
+                else {
+                    for (let i = 0; i < boards.length; i++) {
+                        if (boards[i][1] <= boardScore) {
+                            boards.splice(i, 0, [boardRep120.slice(), boardScore, boardEnPassant])
+                            pushedBoard = true
+                            break
+                        }
                     }
+                }
+                if (!pushedBoard) {
+                    boards.push([boardRep120.slice(), boardScore, boardEnPassant])
                 }
                 // console.log("PROMOTING")
             }
@@ -201,10 +208,7 @@ function GenerateMoves(maxPlayer) {
                 // Add board
                 pushedBoard = false
                 boardScore = GetScoreBoard()
-                if (boards.length == 0) {
-                    boards.push([boardRep120.slice(), boardScore, boardEnPassant])
-                }
-                else {
+                if (maxPlayer) {
                     for (let i = 0; i < boards.length; i++) {
                         if (boards[i][1] >= boardScore) {
                             boards.splice(i, 0, [boardRep120.slice(), boardScore, boardEnPassant])
@@ -212,9 +216,18 @@ function GenerateMoves(maxPlayer) {
                             break
                         }
                     }
-                    if (!pushedBoard) {
-                        boards.push([boardRep120.slice(), boardScore, boardEnPassant])
+                }
+                else {
+                    for (let i = 0; i < boards.length; i++) {
+                        if (boards[i][1] <= boardScore) {
+                            boards.splice(i, 0, [boardRep120.slice(), boardScore, boardEnPassant])
+                            pushedBoard = true
+                            break
+                        }
                     }
+                }
+                if (!pushedBoard) {
+                    boards.push([boardRep120.slice(), boardScore, boardEnPassant])
                 }
             }
             // console.log("BOARD ", boardRepresent)
@@ -240,6 +253,9 @@ function GenerateCaptures(maxPlayer) {
     else {
         isWhite = "b"
     }
+
+    ResetPieces()
+    ResetVars()
 
     // GET BOARDS
     let savePiece
@@ -275,10 +291,7 @@ function GenerateCaptures(maxPlayer) {
                 });
                 pushedBoard = false
                 boardScore = GetScoreBoard()
-                if (boards.length == 0) {
-                    boards.push([boardRep120.slice(), boardScore, boardEnPassant])
-                }
-                else {
+                if (maxPlayer) {
                     for (let i = 0; i < boards.length; i++) {
                         if (boards[i][1] >= boardScore) {
                             boards.splice(i, 0, [boardRep120.slice(), boardScore, boardEnPassant])
@@ -286,20 +299,69 @@ function GenerateCaptures(maxPlayer) {
                             break
                         }
                     }
-                    if (!pushedBoard) {
-                        boards.push([boardRep120.slice(), boardScore, boardEnPassant])
+                }
+                else {
+                    for (let i = 0; i < boards.length; i++) {
+                        if (boards[i][1] <= boardScore) {
+                            boards.splice(i, 0, [boardRep120.slice(), boardScore, boardEnPassant])
+                            pushedBoard = true
+                            break
+                        }
                     }
                 }
+                if (!pushedBoard) {
+                    boards.push([boardRep120.slice(), boardScore, boardEnPassant])
+                }
                 // console.log("PROMOTING")
+            }
+            // Check if En Passant
+            else if (pieceList[v].type == "P" && ((Math.abs(pieceList[v].squareOn120 - pieceList[v].validMoves[n]) == 11) || (Math.abs(pieceList[v].squareOn120 - pieceList[v].validMoves[n]) == 9))) {
+                let savePiece2 = ' '
+                if (isWhite1 == "w") {
+                    savePiece2 = boardRep120[pieceList[v].validMoves[n] + 10]
+                    boardRep120[pieceList[v].validMoves[n] + 10] = ' '
+                }
+                else if (isWhite1 == "b") {
+                    savePiece2 = boardRep120[pieceList[v].validMoves[n] - 10]
+                    boardRep120[pieceList[v].validMoves[n] - 10] = ' '
+                }
+
+                pushedBoard = false
+                boardScore = GetScoreBoard()
+                if (maxPlayer) {
+                    for (let i = 0; i < boards.length; i++) {
+                        if (boards[i][1] >= boardScore) {
+                            boards.splice(i, 0, [boardRep120.slice(), boardScore, boardEnPassant])
+                            pushedBoard = true
+                            break
+                        }
+                    }
+                }
+                else {
+                    for (let i = 0; i < boards.length; i++) {
+                        if (boards[i][1] <= boardScore) {
+                            boards.splice(i, 0, [boardRep120.slice(), boardScore, boardEnPassant])
+                            pushedBoard = true
+                            break
+                        }
+                    }
+                }
+                if (!pushedBoard) {
+                    boards.push([boardRep120.slice(), boardScore, boardEnPassant])
+                }
+
+                if (isWhite1 == "w") {
+                    boardRep120[pieceList[v].validMoves[n] + 10] = savePiece2
+                }
+                else if (isWhite1 == "b") {
+                    boardRep120[pieceList[v].validMoves[n] - 10] = savePiece2
+                }
             }
             else {
                 // Add board
                 pushedBoard = false
                 boardScore = GetScoreBoard()
-                if (boards.length == 0) {
-                    boards.push([boardRep120.slice(), boardScore, boardEnPassant])
-                }
-                else {
+                if (maxPlayer) {
                     for (let i = 0; i < boards.length; i++) {
                         if (boards[i][1] >= boardScore) {
                             boards.splice(i, 0, [boardRep120.slice(), boardScore, boardEnPassant])
@@ -307,9 +369,18 @@ function GenerateCaptures(maxPlayer) {
                             break
                         }
                     }
-                    if (!pushedBoard) {
-                        boards.push([boardRep120.slice(), boardScore, boardEnPassant])
+                }
+                else {
+                    for (let i = 0; i < boards.length; i++) {
+                        if (boards[i][1] <= boardScore) {
+                            boards.splice(i, 0, [boardRep120.slice(), boardScore, boardEnPassant])
+                            pushedBoard = true
+                            break
+                        }
                     }
+                }
+                if (!pushedBoard) {
+                    boards.push([boardRep120.slice(), boardScore, boardEnPassant])
                 }
             }
             // console.log("BOARD ", boardRepresent)
@@ -333,10 +404,11 @@ function MiniMax(depth, alpha, beta, maxPlayer) {
         // PrintBoard120(boardRep120)
         return [score, boardRep120]
     }
-    let oldBoardRep = boardRep120.slice();
     let allMoves = GenerateMoves(maxPlayer)
     let origCastle = canCastle
     let origCastlePieces = castlePiecesMoved
+    let saveEnPassant = possibleEnPassant
+    let oldBoardRep120 = boardRep120.slice()
     // console.log(depth)
     // console.log(allMoves)
     if (allMoves.length != 0) {
@@ -345,7 +417,6 @@ function MiniMax(depth, alpha, beta, maxPlayer) {
             let maxEval = []
             let evalBoard = 0
             let evalBoardLst
-            let saveEnPassant = possibleEnPassant
             for (let v = 0; v < allMoves.length; v++) {
                 boardRep120 = allMoves[v][0].slice()
                 boardScore = allMoves[v][1]
@@ -354,10 +425,22 @@ function MiniMax(depth, alpha, beta, maxPlayer) {
                 SetCastlePieces()
                 UpdateCastling()
                 Reset()
+
+                // let passant = false
+                // for (let i = 81; i < 88; i++) {
+                //     if (oldBoardRep120[i] == 'p' && boardRep120[i] == ' ' && boardRep120[i - 20] == 'p') {
+                //         possibleEnPassant = i - 20
+                //         passant = true
+                //         break
+                //     }
+                // }
+                // if (!passant) { possibleEnPassant = 100 }
                 
                 // Set evalBoard and check for mate
                 isWhite = 'b'
+                // console.log("depth:", depth, "move:", v, "evalBoard:", evalBoard)
                 MateCheck()
+                isWhite = 'w'
                 if (isMate == 1) { evalBoard = 100000 }
                 else if (isMate == 2) { evalBoard = 0 }
                 else if (isMate == 3) { evalBoard = -100000}
@@ -391,14 +474,13 @@ function MiniMax(depth, alpha, beta, maxPlayer) {
             }
 
             possibleEnPassant = saveEnPassant
-            boardRep120 = oldBoardRep
+            boardRep120 = oldBoardRep120
             return [maxEvalVal, maxEval]
         }
         else {
             let minEvalVal = +Infinity
             let minEval = []
             let evalBoard = 0
-            let saveEnPassant = possibleEnPassant
             for (let v = 0; v < allMoves.length; v++) {
                 boardRep120 = allMoves[v][0].slice()
                 boardScore = allMoves[v][1]
@@ -408,17 +490,24 @@ function MiniMax(depth, alpha, beta, maxPlayer) {
                 UpdateCastling()
                 Reset()
 
-                if (depth == 5) {
-                    console.log("Moves checked")
-                    PrintBoard120(allMoves[v][0])
-                }
+                let passant = false
+                // for (let i = 31; i < 38; i++) {
+                //     if (oldBoardRep120[i] == 'P' && boardRep120[i] == ' ' && boardRep120[i + 20] == 'P') {
+                //         possibleEnPassant = i + 20
+                //         passant = true
+                //         break
+                //     }
+                // }
+                if (!passant) { possibleEnPassant = 100 }
 
                 // Set evalBoard and check for mate
                 isWhite = 'w'
+                // console.log("depth:", depth, "move:", v, "evalBoard:", evalBoard)
                 MateCheck()
-                if (isMate == 1) { evalBoard = 100000 }
+                isWhite = 'w'
+                if (isMate == 1) { evalBoard = -100000 }
                 else if (isMate == 2) { evalBoard = 0 }
-                else if (isMate == 3) { evalBoard = -100000}
+                else if (isMate == 3) { evalBoard = 100000}
                 else {
                     possibleEnPassant = allMoves[2]
                     evalBoardLst = MiniMax(depth-1, alpha, beta, true)
@@ -428,11 +517,6 @@ function MiniMax(depth, alpha, beta, maxPlayer) {
                     else {
                         evalBoard = 100000
                     }
-                }
-
-                if (depth == 5) {
-                    console.log("Moves checked")
-                    PrintBoard120(allMoves[v][0])
                 }
 
                 canCastle = origCastle
@@ -452,11 +536,14 @@ function MiniMax(depth, alpha, beta, maxPlayer) {
                     break
                 }
             }
-            
+
             possibleEnPassant = saveEnPassant
-            boardRep120 = oldBoardRep;
+            boardRep120 = oldBoardRep120
             return [minEvalVal, minEval]
         }
+    }
+    else {
+        return [0, boardRep120]
     }
 }
 
@@ -470,17 +557,19 @@ function Quiescence(alpha, beta, maxPlayer, level = 0) { // search only captures
     //     alpha = quiesceScore
     // }
 
-    if (level == 0) {
-        // console.log("Quiescence entry: boardScore=", boardScore, "alpha=", alpha, "beta=", beta, "maxPlayer=", maxPlayer);
-    }
+    // if (level == 0) {
+    //     console.log("Quiescence entry: boardScore=", boardScore, "alpha=", alpha, "beta=", beta, "maxPlayer=", maxPlayer);
+    // }
 
-    if (level == 8) {
+    if (level == 5) {
         return alpha
     }
 
+    let saveEnPassant = possibleEnPassant
     if (maxPlayer) { // white
         let allCaptures = GenerateCaptures(maxPlayer);
         if (allCaptures.length == 0) {
+            possibleEnPassant = saveEnPassant;
             return boardScore;
         }
 
@@ -491,18 +580,28 @@ function Quiescence(alpha, beta, maxPlayer, level = 0) { // search only captures
         // if (alpha >= beta) {
         //     return beta;
         // }
-        let saveEnPassant = possibleEnPassant
-        let oldBoardRep = boardRep120.slice();
+
+        let oldBoardRep120 = boardRep120.slice();
         for (let i = 0; i < allCaptures.length; i++) {
             boardRep120 = allCaptures[i][0].slice();
             ResetPieces();
+
+            let passant = false
+            for (let i = 81; i < 88; i++) {
+                if (oldBoardRep120[i] == 'p' && boardRep120[i] == ' ' && boardRep120[i - 20] == 'p') {
+                    possibleEnPassant = i - 20
+                    passant = true
+                    break
+                }
+            }
+            if (!passant) { possibleEnPassant = 100 }
             
-            possibleEnPassant = allCaptures[2]
             let score = Quiescence(alpha, beta, false, level + 1);
             
             if (score >= beta && level > 0) {
-                boardRep120 = oldBoardRep.slice();
+                boardRep120 = oldBoardRep120.slice();
                 ResetPieces();
+                possibleEnPassant = saveEnPassant;
                 return beta;
             }
             if (score > alpha) {
@@ -510,14 +609,15 @@ function Quiescence(alpha, beta, maxPlayer, level = 0) { // search only captures
             }
         }
         
-        possibleEnPassant = saveEnPassant
-        boardRep120 = oldBoardRep.slice();
+        boardRep120 = oldBoardRep120.slice();
         ResetPieces();
+        possibleEnPassant = saveEnPassant
         return alpha;
         
     } else { // black
         let allCaptures = GenerateCaptures(false);
         if (allCaptures.length == 0) {
+            possibleEnPassant = saveEnPassant;
             return boardScore;
         }
 
@@ -529,16 +629,27 @@ function Quiescence(alpha, beta, maxPlayer, level = 0) { // search only captures
         //     return alpha;
         // }
 
-        let oldBoardRep = boardRep120.slice();
+        let oldBoardRep120 = boardRep120.slice();
         for (let i = 0; i < allCaptures.length; i++) {
             boardRep120 = allCaptures[i][0].slice();
             ResetPieces();
+
+            let passant = false
+            for (let i = 31; i < 38; i++) {
+                if (oldBoardRep120[i] == 'P' && boardRep120[i] == ' ' && boardRep120[i + 20] == 'P') {
+                    possibleEnPassant = i + 20
+                    passant = true
+                    break
+                }
+            }
+            if (!passant) { possibleEnPassant = 100 }
             
             let score = Quiescence(alpha, beta, true, level + 1);
             
             if (score <= alpha && level > 0) {
-                boardRep120 = oldBoardRep.slice();
+                boardRep120 = oldBoardRep120.slice();
                 ResetPieces();
+                possibleEnPassant = saveEnPassant;
                 return alpha;
             }
             if (score < beta) {
@@ -546,8 +657,9 @@ function Quiescence(alpha, beta, maxPlayer, level = 0) { // search only captures
             }
         }
         
-        boardRep120 = oldBoardRep.slice();
+        boardRep120 = oldBoardRep120.slice();
         ResetPieces();
+        possibleEnPassant = saveEnPassant
         return beta;
     }
 
@@ -586,7 +698,7 @@ function ComputerMove() {
     let saveCastlePieces = [...castlePiecesMoved]
     let saveIsInCheck = [K[0].isInCheck, K[1].isInCheck]
 
-    let minimax = MiniMax(1, -Infinity, Infinity, isWhiteBool) // get best move (bottom of tree, last move) 
+    let minimax = MiniMax(3, -Infinity, Infinity, isWhiteBool) // get best move (bottom of tree, last move) 
     let bestScore = minimax[0]
     let chosenMoves = minimax[1]
     let move = chosenMoves[Math.floor(Math.random() * chosenMoves.length)]
@@ -599,15 +711,6 @@ function ComputerMove() {
     console.log("CHOSEN MOVE")
     PrintBoard120(move)
 
-    // Move piece
-    castlePiecesMoved = saveCastlePieces
-    isWhite = saveIsWhite
-    boardRep120 = move
-    ResetPieces()
-    Reset()
-    K[0].isInCheck = saveIsInCheck[0]
-    K[1].isInCheck = saveIsInCheck[1]
-
     // Update possible En Passant move
     // TODO: Fix to work with updating board size
     for (let i = 31; i < 38; i++) {
@@ -618,6 +721,15 @@ function ComputerMove() {
         }
     }
     if (!passant) { possibleEnPassant = 100 }
+
+    // Move piece
+    castlePiecesMoved = saveCastlePieces
+    isWhite = saveIsWhite
+    boardRep120 = move
+    ResetPieces()
+    Reset()
+    K[0].isInCheck = saveIsInCheck[0]
+    K[1].isInCheck = saveIsInCheck[1]
 
     // Change colors
     if (isWhite == 'w') { isWhite = 'b' }

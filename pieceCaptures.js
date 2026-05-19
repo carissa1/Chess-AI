@@ -87,6 +87,21 @@ function PawnCaptures(sq) {
     // console.log("row: ", r2)
     let validMoves = []
     let validMoves2 = []
+    if (pieceSquares[sq120] == undefined) {
+        console.log("ERROR")
+        console.log(pieceSquares)
+        console.log(sq120, sq)
+        console.log(pieceSquares[sq120])
+        PrintBoard120(boardRep120)
+    }
+    if (!pieceSquares[sq120]) {
+        console.error(`pieceSquares[${sq120}] is undefined`, {
+            sq120,
+            pieceSquaresLength: pieceSquares?.length,
+            pieceSquaresKeys: Object.keys(pieceSquares).slice(0, 10)
+        });
+        return;
+    }
     if(pieceSquares[sq120].color == 'w') {
         validMoves2 = [sq120-9, sq120-11] // take a piece
 
